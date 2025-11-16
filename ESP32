@@ -1,0 +1,42 @@
+// Example (Arduino) – User block with ultrasonic sensor, button, OLED
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
+#include <ESP8266WiFi.h>
+const int buttonPin = D2;
+const int trigPin = D3;
+const int echoPin = D4;
+Adafruit_SSD1306 display(128, 64, &Wire);
+
+void setup() {
+  pinMode(buttonPin, INPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  WiFi.begin("SSID", "PASSWORD");
+}
+
+void loop() {
+  // Sensor logic
+  long duration, distance;
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * 0.034 / 2;
+
+  // Button press to request ride
+  if (digitalRead(buttonPin) == HIGH && distance < 50) {
+    // Display
+    display.setTextSize(2);
+    display.setCursor(0,0);
+    display.print("Ride Requested");
+    display.display();
+
+    // TODO: Add code to notify backend (e.g., HTTP request)
+    delay(5000);
+  }
+  delay(100);
+}
