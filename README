@@ -1,0 +1,36 @@
+# IOT_Team Name
+
+## Overview
+
+Accessible E-Rickshaw Automation System — enables elderly and special needs users to request rickshaws with smart block units and web dashboards.
+
+## 1. Hardware Setup
+- Wire up sensors: ultrasound, LDR, button, LEDs to ESP32.
+- Upload firmware (`user_code.ino`).
+- Connect to WiFi (edit credentials in code).
+
+## 2. Backend Setup
+- Install Node.js 18+.
+- `npm install`
+- `node server.js`
+
+## 3. Rickshaw Web-app
+- `cd rickshaw-app`
+- `npm install`
+- `npm start`
+
+## 4. Admin Dashboard
+- `cd admin-dashboard`
+- `npm install`
+- `npm start`
+
+## 5. Usage
+- Stand on block, press button.
+- Rickshaw puller sees new request in web-app and can accept.
+- Admin monitors rides in dashboard.
+
+## 6. Configuration
+- Edit `.env` for API keys, ports etc as needed.
+
+## 7. Support
+- Include screenshots, troubleshooting, contact email.
