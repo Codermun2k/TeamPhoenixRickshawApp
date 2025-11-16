@@ -1,0 +1,32 @@
+// src/pages/Admin.js
+import React, { useEffect, useState } from 'react';
+
+function AdminDashboard() {
+  const [rides, setRides] = useState([]);
+  useEffect(() => {
+    fetch('/api/allRides').then(res => res.json()).then(data => setRides(data));
+  }, []);
+  return (
+    <div>
+      <h1> Ride History & Management </h1>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>User</th><th>Status</th><th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rides.map(ride => (
+            <tr key={ride.id}>
+              <td>{ride.id}</td>
+              <td>{ride.user}</td>
+              <td>{ride.status}</td>
+              <td>{new Date(ride.id).toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+export default AdminDashboard;
