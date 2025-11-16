@@ -1,0 +1,35 @@
+// server.js
+const express = require('express');
+const app = express();
+let rideRequests = [];
+
+app.use(express.json());
+
+// Receive ride request from microcontroller block
+app.post('/api/request', (req, res) => {
+  const { user, location } = req.body;
+  rideRequests.push({ id: Date.now(), user, location, status: 'pending' });
+  res.json({ ok: true });
+});
+
+// Rickshaw side: get new requests
+app.get('/api/requests', (req, res) => {
+  res.json(rideRequests.filter(r => r.status === 'pending'));
+});
+
+// Accept/reject by rickshaw puller
+app.post('/api/accept/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const reqIdx = rideRequests.findIndex(r => r.id === id);
+  if (reqIdx !== -1) rideRequests[reqIdx].status = 'accepted';
+  res.json({ ok: true });
+});
+
+app.post('/api/reject/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const reqIdx = rideRequests.findIndex(r => r.id === id);
+  if (reqIdx !== -1) rideRequests[reqIdx].status = 'rejected';
+  res.json({ ok: true });
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));
