@@ -1,0 +1,36 @@
+// src/pages/Dashboard.js (React)
+import React, { useEffect, useState } from 'react';
+
+function Dashboard() {
+  const [requests, setRequests] = useState([]);
+  
+  useEffect(() => {
+    // Poll backend for new ride requests
+    const interval = setInterval(() => {
+      fetch('/api/requests')
+        .then(res => res.json())
+        .then(data => setRequests(data));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  function handleAccept(reqId) { fetch(`/api/accept/${reqId}`, {method: 'POST'}); }
+  function handleReject(reqId) { fetch(`/api/reject/${reqId}`, {method: 'POST'}); }
+
+  return (
+    <div>
+      <h1>Incoming Ride Requests</h1>
+      <ul>
+        {requests.map(req => (
+          <li key={req.id}>
+            Location: {req.location}
+            <button onClick={() => handleAccept(req.id)}>Accept</button>
+            <button onClick={() => handleReject(req.id)}>Reject</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default Dashboard;
